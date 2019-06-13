@@ -24,6 +24,14 @@ class Instructor extends Person {
   grade(student, subject) {
     console.log(`${student.name} receives a perfect score on ${subject}`);
   }
+  adjustGrade(student) {
+    function getInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+    student.grade = student.grade + getInt(1, 10);
+  }
 }
 
 class Student extends Person {
@@ -32,6 +40,7 @@ class Student extends Person {
     this.previousBackground = studentProps.previousBackground;
     this.className = studentProps.className;
     this.favSubjects = studentProps.favSubjects;
+    this.grade = studentProps.grade;
   }
   listSubjects() {
     this.favSubjects.forEach(function(element) {
@@ -43,6 +52,19 @@ class Student extends Person {
   }
   sprintChallenge(subject) {
     console.log(`${this.name} has begun sprint challenge on ${subject}`);
+  }
+  graduate(grader, student) {
+    if (student.grade < 70) {
+      while (student.grade < 70) {
+        grader.adjustGrade(student);
+      }
+    }
+
+    console.log(
+      `Congratulations, ${this.name}! Your grade is now ${
+        this.grade
+      }, so it's time for you to graduate!`
+    );
   }
 }
 
@@ -106,7 +128,8 @@ const kurt = new Student({
   location: "Seattle",
   previousBackground: "Toying around with Java",
   className: "WEB21",
-  favSubjects: ["LESS", "CSS", "JavaScript"]
+  favSubjects: ["LESS", "CSS", "JavaScript"],
+  grade: 30
 });
 
 const ashley = new Student({
@@ -115,7 +138,8 @@ const ashley = new Student({
   location: "Orlando",
   previousBackground: "None",
   className: "WEB21",
-  favSubjects: ["Flex", "HTML"]
+  favSubjects: ["Flex", "HTML"],
+  grade: 62
 });
 
 ted.speak();
@@ -126,3 +150,5 @@ ashley.PRAssignment("JavaScript");
 kurt.sprintChallenge("LESS");
 sally.standUp("WEB21");
 billy.debugsCode(kurt, "CSS");
+
+kurt.graduate(ted, kurt);
